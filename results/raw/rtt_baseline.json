@@ -1,0 +1,50 @@
+{
+  "environment": {
+    "hostname": "user",
+    "os": "Linux 6.8.0-101-generic",
+    "wsl2": false,
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700K",
+    "logical_cores": 20,
+    "host_ram_gb": 67.2,
+    "python": "3.13.5",
+    "docker": "Ubuntu 22.04.5 LTS (ncpu=20, mem=67.2GB)",
+    "fingerprint": "e7a882e7ca9a5b70"
+  },
+  "baselines": {
+    "cognodb": {
+      "rtt_p50_ms": 243.659,
+      "rtt_p95_ms": 258.361,
+      "rtt_stdev_ms": 109.917,
+      "deployment": "managed",
+      "server": "version query unsupported"
+    },
+    "neo4j_aura": {
+      "rtt_p50_ms": 87.555,
+      "rtt_p95_ms": 200.438,
+      "rtt_stdev_ms": 87.237,
+      "deployment": "managed",
+      "server": "Neo4j Kernel 5.27-aura"
+    },
+    "memgraph": {
+      "rtt_p50_ms": 0.181,
+      "rtt_p95_ms": 0.415,
+      "rtt_stdev_ms": 0.113,
+      "deployment": "docker",
+      "server": "Memgraph 5.9.0"
+    },
+    "falkordb": {
+      "rtt_p50_ms": 0.059,
+      "rtt_p95_ms": 0.098,
+      "rtt_stdev_ms": 0.019,
+      "deployment": "docker",
+      "server": "FalkorDB"
+    },
+    "arangodb": {
+      "rtt_p50_ms": 0.425,
+      "rtt_p95_ms": 0.474,
+      "rtt_stdev_ms": 0.02,
+      "deployment": "docker",
+      "server": "ArangoDB 3.11.10"
+    }
+  }
+}

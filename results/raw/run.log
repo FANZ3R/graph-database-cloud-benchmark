@@ -1,0 +1,75 @@
+verifying semantic equivalence across platforms:
+  OK   point_lookup
+  OK   filtered_lookup
+  OK   hop1
+  OK   hop2
+  OK   hop3
+  OK   agg_region
+  OK   agg_rel_count
+
+=== CognoDB Cloud (free c0) ===
+    point_lookup       wall p50=  239.61ms  p95=  240.58ms  server p50=     n/ams  rows~1
+    filtered_lookup    wall p50=  239.88ms  p95=  241.18ms  server p50=     n/ams  rows~9
+    hop1               wall p50=  240.17ms  p95=  241.24ms  server p50=     n/ams  rows~15
+    hop2               wall p50=  246.46ms  p95=  501.76ms  server p50=     n/ams  rows~375
+    hop3               wall p50=  500.23ms  p95=  520.01ms  server p50=     n/ams  rows~748
+    agg_region         wall p50=  268.76ms  p95=  286.75ms  server p50=     n/ams  rows~20
+    agg_rel_count      wall p50= 1478.88ms  p95= 1605.72ms  server p50=     n/ams  rows~1
+  concurrency sweep:
+      1 clients        3.4 qps  p50=  240.56ms  errors=0
+     10 clients       33.6 qps  p50=  249.55ms  errors=0
+     40 clients      112.1 qps  p50=  272.77ms  errors=0
+
+=== Neo4j AuraDB Free ===
+    point_lookup       wall p50=   83.88ms  p95=   85.42ms  server p50=    2.00ms  rows~1
+    filtered_lookup    wall p50=   83.49ms  p95=   90.91ms  server p50=    2.00ms  rows~9
+    hop1               wall p50=   83.53ms  p95=   84.63ms  server p50=    2.00ms  rows~15
+    hop2               wall p50=   87.48ms  p95=  179.10ms  server p50=    2.00ms  rows~375
+    hop3               wall p50=  175.78ms  p95=  182.03ms  server p50=    3.00ms  rows~748
+    agg_region         wall p50=   91.11ms  p95=   96.24ms  server p50=    9.00ms  rows~20
+    agg_rel_count      wall p50=  107.73ms  p95=  120.94ms  server p50=   26.00ms  rows~1
+  concurrency sweep:
+      1 clients       10.8 qps  p50=   83.00ms  errors=0
+     10 clients      102.4 qps  p50=   86.58ms  errors=0
+     40 clients      399.7 qps  p50=   87.98ms  errors=0
+
+=== Memgraph (Docker, capped) ===
+    point_lookup       wall p50=    0.19ms  p95=    0.29ms  server p50=     n/ams  rows~1
+    filtered_lookup    wall p50=    0.27ms  p95=    0.65ms  server p50=     n/ams  rows~9
+    hop1               wall p50=    0.32ms  p95=    0.79ms  server p50=     n/ams  rows~15
+    hop2               wall p50=    2.45ms  p95=    8.37ms  server p50=     n/ams  rows~375
+    hop3               wall p50=    7.85ms  p95=    8.95ms  server p50=     n/ams  rows~748
+    agg_region         wall p50=    2.74ms  p95=    6.86ms  server p50=     n/ams  rows~20
+    agg_rel_count      wall p50=   12.95ms  p95=   65.95ms  server p50=     n/ams  rows~1
+  concurrency sweep:
+      1 clients      908.9 qps  p50=    0.27ms  errors=0
+     10 clients      571.1 qps  p50=    4.12ms  errors=0
+     40 clients      468.3 qps  p50=   14.64ms  errors=0
+
+=== FalkorDB (Docker, capped) ===
+    point_lookup       wall p50=    0.09ms  p95=    0.12ms  server p50=    0.03ms  rows~1
+    filtered_lookup    wall p50=    0.10ms  p95=    0.19ms  server p50=    0.04ms  rows~9
+    hop1               wall p50=    0.12ms  p95=    0.22ms  server p50=    0.05ms  rows~15
+    hop2               wall p50=    0.77ms  p95=    2.14ms  server p50=    0.24ms  rows~375
+    hop3               wall p50=    2.14ms  p95=    2.56ms  server p50=    0.61ms  rows~748
+    agg_region         wall p50=    1.79ms  p95=    3.54ms  server p50=    1.59ms  rows~20
+    agg_rel_count      wall p50=    0.06ms  p95=    0.07ms  server p50=    0.02ms  rows~1
+  concurrency sweep:
+      1 clients    2,815.4 qps  p50=    0.15ms  errors=0
+     10 clients    2,617.1 qps  p50=    1.87ms  errors=0
+     40 clients    2,504.3 qps  p50=    8.28ms  errors=472
+
+=== ArangoDB (Docker, capped) ===
+    point_lookup       wall p50=    0.49ms  p95=    0.73ms  server p50=    0.05ms  rows~1
+    filtered_lookup    wall p50=    0.52ms  p95=    0.71ms  server p50=    0.07ms  rows~9
+    hop1               wall p50=    0.54ms  p95=    0.80ms  server p50=    0.09ms  rows~15
+    hop2               wall p50=    1.35ms  p95=    4.20ms  server p50=    0.74ms  rows~375
+    hop3               wall p50=    4.10ms  p95=   46.67ms  server p50=    3.14ms  rows~748
+    agg_region         wall p50=    3.60ms  p95=   44.64ms  server p50=    2.93ms  rows~20
+    agg_rel_count      wall p50=    6.33ms  p95=   52.54ms  server p50=    5.50ms  rows~1
+  concurrency sweep:
+      1 clients    1,007.5 qps  p50=    0.60ms  errors=0
+     10 clients      825.3 qps  p50=    5.19ms  errors=0
+     40 clients      794.0 qps  p50=   43.63ms  errors=0
+
+written -> /home/user/PROJECT/SELF/COGNO_DB/graphdb-bench/results/raw/workloads.json

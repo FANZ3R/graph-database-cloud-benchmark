@@ -1,0 +1,83 @@
+{
+  "manifest": {
+    "source": "SNAP soc-Pokec social network",
+    "source_url": "https://snap.stanford.edu/data/soc-Pokec.html",
+    "full_graph": {
+      "nodes": 1632803,
+      "relationships": 30622564
+    },
+    "sample_method": "deterministic BFS/snowball from a high-degree seed",
+    "sample_seed": 20260820,
+    "seed_node": 11123,
+    "nodes": 13180,
+    "relationships": 150000,
+    "node_properties": [
+      "uid (int)",
+      "gender (str)",
+      "region (str)",
+      "age (int)"
+    ],
+    "relationship_type": "FRIEND (directed)",
+    "size_constraint": "Capped at <=45,000 nodes / 150,000 relationships to fit the most conservative published Neo4j AuraDB Free limit (50k nodes / 175k relationships). Neo4j's FAQ states 200k/400k; the product announcement states 50k/175k. We sized to the smaller figure.",
+    "nodes_csv_sha256": "6e26c3befaff86b6b806b6c70ef8509af9f764366b9cc7b4fe3ab908354be8e0",
+    "edges_csv_sha256": "2d03fd836f1701792ea49e7b4c0f6419b530b8015e207647110cceffc1b6ea18"
+  },
+  "results": {
+    "cognodb": {
+      "platform": "cognodb",
+      "batch_size_nodes": 5000,
+      "batch_size_edges": 10000,
+      "reset_performed": true,
+      "reset_seconds": 1.974,
+      "index_ready_wait_seconds": 28.81,
+      "nodes_loaded": 13180,
+      "relationships_loaded": 150000,
+      "node_load_seconds": 2.506,
+      "index_build_seconds": 4.217,
+      "edge_load_seconds": 10.657,
+      "total_load_seconds": 17.38,
+      "nodes_per_second": 5259.1,
+      "relationships_per_second": 14075.7,
+      "indexes": [
+        "range index on :User(uid)",
+        "range index on :User(region)",
+        "composite index on :User(region, age)"
+      ],
+      "footprint": {
+        "observable": true,
+        "source": "Bolt introspection",
+        "nodes": 13180,
+        "relationships": 150000,
+        "note": "On-disk store size is not exposed over Bolt on managed tiers; read it from the vendor console instead."
+      },
+      "load_verified": true
+    },
+    "neo4j_aura": {
+      "platform": "neo4j_aura",
+      "batch_size_nodes": 5000,
+      "batch_size_edges": 10000,
+      "reset_seconds": 2.946,
+      "nodes_loaded": 13180,
+      "relationships_loaded": 150000,
+      "node_load_seconds": 1.369,
+      "index_build_seconds": 0.364,
+      "edge_load_seconds": 11.454,
+      "total_load_seconds": 13.187,
+      "nodes_per_second": 9628.9,
+      "relationships_per_second": 13095.7,
+      "indexes": [
+        "range index on :User(uid)",
+        "range index on :User(region)",
+        "composite index on :User(region, age)"
+      ],
+      "footprint": {
+        "observable": true,
+        "source": "Bolt introspection",
+        "nodes": 13180,
+        "relationships": 150000,
+        "note": "On-disk store size is not exposed over Bolt on managed tiers; read it from the vendor console instead."
+      },
+      "load_verified": true
+    }
+  }
+}
