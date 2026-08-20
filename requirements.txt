@@ -1,0 +1,9 @@
+neo4j==5.28.1
+falkordb==1.0.10
+python-arango==8.1.2
+python-dotenv==1.0.1
+numpy==2.2.1
+pandas==2.2.3
+matplotlib==3.10.0
+tqdm==4.67.1
+requests==2.32.3

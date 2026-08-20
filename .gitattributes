@@ -1,0 +1,11 @@
+# Normalise text to LF in the repo. Without this, Git on Windows rewrites
+# line endings on checkout and integer parsing of the dataset CSVs breaks.
+* text=auto eol=lf
+
+# Data files are byte-exact and SHA-256 verified -- never transform them.
+*.csv   -text
+*.json  text eol=lf
+*.sh    text eol=lf
+*.py    text eol=lf
+*.yml   text eol=lf
+*.md    text eol=lf

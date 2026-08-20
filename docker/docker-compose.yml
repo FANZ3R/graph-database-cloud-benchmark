@@ -1,0 +1,85 @@
+# Every service is hard-capped to CognoDB's observed free-tier envelope:
+#   0.5 vCPU / 512 MB RAM / 1 GiB disk
+#
+# `cpus` and `mem_limit` are enforced by the kernel (cgroups v2), not advisory.
+# Verify with:  docker stats --no-stream
+#
+# NOTE ON THE 512 MB FIGURE
+# The assignment brief states the CognoDB free tier is 256 MB. The instance we
+# were actually provisioned (c0, us-east4, v0.9.11) reports 512 MB in the
+# console. We size every platform to the OBSERVED spec and document the
+# divergence in the README rather than silently picking one.
+#
+# NOTE ON cpuset
+# The benchmark host runs 13 unrelated long-lived containers. Pinning the
+# benchmark services to dedicated cores isolates them from that background
+# load. All three share the same cpuset because they are benchmarked serially
+# and never run concurrently -- what matters is that each gets an IDENTICAL
+# slice of identical silicon. On a hybrid-architecture CPU (P-cores vs
+# E-cores) an unpinned comparison would partly measure core type rather than
+# database. Confirm the chosen cores are the same type with `lscpu -e`.
+#
+# NOTE ON PORTS
+# Memgraph is mapped to host 7690 because host 7687 is occupied by an
+# unrelated long-running neo4j:5.17 container.
+#
+# neo4j-community is included deliberately and may still fail at 512 MB with a
+# 0.5 CPU cap. If it does, that failure is a reported result, not an omission
+# -- see README "Platforms that did not fit".
+
+services:
+  memgraph:
+    image: memgraph/memgraph:2.18.1
+    container_name: bench-memgraph
+    command: ["--also-log-to-stderr", "--log-level=WARNING", "--storage-snapshot-on-exit=false"]
+    ports: ["7690:7687"]
+    cpus: 0.5
+    cpuset: "4,5"
+    mem_limit: 512m
+    mem_reservation: 512m
+    volumes:
+      - memgraph-data:/var/lib/memgraph
+
+  falkordb:
+    image: falkordb/falkordb:v4.2.2
+    container_name: bench-falkordb
+    ports: ["6379:6379"]
+    cpus: 0.5
+    cpuset: "4,5"
+    mem_limit: 512m
+    mem_reservation: 512m
+    volumes:
+      - falkor-data:/data
+
+  arangodb:
+    image: arangodb:3.11.10
+    container_name: bench-arangodb
+    environment:
+      ARANGO_ROOT_PASSWORD: bench
+    ports: ["8529:8529"]
+    cpus: 0.5
+    cpuset: "4,5"
+    mem_limit: 512m
+    mem_reservation: 512m
+    volumes:
+      - arango-data:/var/lib/arangodb3
+
+  # Expected to OOM/refuse-to-start. Kept so the failure is reproducible.
+  neo4j-community:
+    image: neo4j:5.26-community
+    container_name: bench-neo4j-oom
+    profiles: ["expected-failure"]
+    environment:
+      NEO4J_AUTH: neo4j/benchbench
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 256m
+      NEO4J_server_memory_pagecache_size: 128m
+    ports: ["7688:7687"]
+    cpus: 0.5
+    cpuset: "4,5"
+    mem_limit: 512m
+
+volumes:
+  memgraph-data:
+  falkor-data:
+  arango-data:
