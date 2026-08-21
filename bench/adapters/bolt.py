@@ -1,34 +1,4 @@
 """Bolt/Cypher adapter -- serves CognoDB Cloud, Neo4j AuraDB and Memgraph.
-
-All three speak the Bolt protocol and accept the official Neo4j Python driver,
-so they share one implementation and, importantly, one set of *query* strings.
-Any latency difference between them is therefore attributable to the engine
-and the network, never to a query someone wrote more cleverly for one target.
-
-DDL is a different story. Memgraph accepts Cypher queries but not Neo4j's
-index grammar, so index creation and introspection are dialect-specific. That
-split is deliberate and narrow: the measured queries stay byte-identical, only
-the schema setup diverges.
-
-Load ordering matters
----------------------
-Nodes are created first, then the uid index, then edges. Creating the index
-before the edge load is not optional: each edge insert resolves two uids, so
-without an index that phase degrades to a full label scan per edge -- on this
-dataset roughly 4 billion comparisons at 0.5 vCPU -- and the ingest benchmark
-would measure the absence of an index rather than write throughput. Building
-it after the node load rather than before is the cheaper direction, since bulk
-index construction beats incremental maintenance.
-
-Writes are verified, never assumed
-----------------------------------
-A Cypher CREATE guarded by a MATCH that finds nothing succeeds and creates
-nothing: no error, no warning. Counting submitted rows would therefore report
-a complete load, and a throughput number, for work that never happened. Every
-batch is checked against the server's own counters, and the edge phase is
-re-read in a fresh session afterwards -- a load the server acknowledges but
-which is not subsequently visible is a different failure from one that never
-happened, and the two must not be conflated.
 """
 from __future__ import annotations
 
@@ -39,9 +9,6 @@ from neo4j import GraphDatabase
 
 from .base import Adapter
 
-# ---------------------------------------------------------------------------
-# Query strings. Identical text for every Bolt platform -- deliberately.
-# ---------------------------------------------------------------------------
 QUERIES: dict[str, str] = {
     "point_lookup":
         "MATCH (u:User {uid: $uid}) RETURN u.uid AS uid, u.age AS age",
