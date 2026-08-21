@@ -4,6 +4,8 @@ A reproducible comparison of **CognoDB Cloud**, **Neo4j AuraDB Free**, **Memgrap
 
 **The headline is not which database won.** It is that the first version of this benchmark measured the Indian Ocean, and the second version found a bug that silently discarded 150,000 records.
 
+📝 **Full write-up:** [I benchmarked 5 graph databases. The first four hours measured the Indian Ocean.](https://dev.to/burz4m_13b009bb9f0a92a88c/i-benchmarked-5-graph-databases-the-first-four-hours-measured-the-indian-ocean-1ea0)
+
 ---
 
 ## TL;DR
